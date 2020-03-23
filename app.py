@@ -3,7 +3,7 @@ app = Flask(__name__)
 
 @app.route('/version')
 def hello_world():
-    return 'Flask Dockerized'
+    return 'contenttech application'
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0', port=8080)
