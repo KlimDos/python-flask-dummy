@@ -4,12 +4,12 @@
 * `git clone`
 * `cd to repo root folder`
 * `docker build . -t <dummy:0.1>`
-*or*
+* *or*
 * `docker pull klimdos/dummy-flask-app:latest`
 ---
 ## re-tag
 * `docker tag <dummy:0.1> artifactory.aws.wiley.com/docker/system/application:dummy.0.0.0`
-example: `docker tag klimdos/dummy-flask-app:latest artifactory.aws.wiley.com/docker/cmh/cmh-job-api:dummy.0.0.1`
+* example: `docker tag klimdos/dummy-flask-app:latest artifactory.aws.wiley.com/docker/cmh/cmh-job-api:dummy.0.0.1`
 
 ## push
 * `docker login artifactory.aws.wiley.com`
