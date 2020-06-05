@@ -18,17 +18,10 @@ jobs:
       - name: Install Python dependencies
         run: pip install black flake8
 
-
       - name: Run linters
-        uses: actions/setup-python@v1
+        uses: samuelmeuli/lint-action@v1
         with:
-          python-version: 3.8
-
-      # - uses: actions/checkout@v1
-      # - uses: actions/python-lint@v1.1.0
-      #     with:
-      #       use-pylint: true
-      - name: Run linters
-        uses: ricardochaves/python-lint@v1.1.0
-        with:
-          use-pylint: true
+          github_token: ${{ secrets.github_token }}
+          # Enable linters
+          black: true
+          flake8: true
