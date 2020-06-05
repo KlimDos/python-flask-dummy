@@ -20,13 +20,13 @@ jobs:
           python-version: 3.8
 
       - name: Install Python dependencies
-        run: pip install black flake8 pylint
+        run: pip install pylint pylint-fail-under
 
       - name: run pylint
         run: |
             echo ${{steps.changed_files.outputs.added_modified}}
             for changed_file in ${{ steps.changed_files.outputs.added_modified }}; do
               if [[ $changed_file =~ ".py" ]]; then
-                  pylint ${changed_file}
+                  pylint-fail-under --fail_under 7.0 ${changed_file}
               fi
             done
