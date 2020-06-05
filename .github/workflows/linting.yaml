@@ -10,7 +10,9 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v2
 
-      - uses: jitterbit/get-changed-files@v1
+      - name: Get changed files
+        id: changed_files
+        uses: jitterbit/get-changed-files@v1
         #with:
           # Format of the steps output context.
           # Can be 'space-delimited', 'csv', or 'json'.
@@ -24,8 +26,8 @@ jobs:
       #   with:
       #     repo-token: ${{ github.token }}
 
-      # - name: debug
-      #   run: echo ${{steps.changed_files.outputs.files_created}}
+      - name: debug
+        run: echo ${{steps.changed_files.outputs}}
 
       - name: Set up Python
         uses: actions/setup-python@v1
