@@ -14,19 +14,6 @@ jobs:
         id: changed_files
         uses: jitterbit/get-changed-files@v1
 
-        #with:
-          # Format of the steps output context.
-          # Can be 'space-delimited', 'csv', or 'json'.
-          # Default: 'space-delimited'
-          #format: ''
-
-
-      # - name: Changed Files Exporter
-      #   id: changed_files
-      #   uses: futuratrepadeira/changed-files@v3.1.0
-      #   with:
-      #     repo-token: ${{ github.token }}
-
       - name: Set up Python
         uses: actions/setup-python@v1
         with:
@@ -34,17 +21,6 @@ jobs:
 
       - name: Install Python dependencies
         run: pip install black flake8 pylint
-
-      # - name: Run linters
-      #   uses: samuelmeuli/lint-action@v1
-      #   with:
-      #     github_token: ${{ secrets.github_token }}
-      #     # Enable linters
-      #     black: true
-      #     flake8: true
-
-      # - name: run pylint
-      #   run: pylint *.py
 
       - name: run pylint
         run: |
