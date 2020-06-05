@@ -27,7 +27,7 @@ jobs:
       #     repo-token: ${{ github.token }}
 
       - name: debug
-        run: echo ${{steps.changed_files.outputs}}
+        run: echo ${{steps.changed_files.outputs.added_modified}}
 
       - name: Set up Python
         uses: actions/setup-python@v1
