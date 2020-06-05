@@ -1,6 +1,6 @@
 ---
 name: Python Linting
-on: push
+on: [push, pull_request]
 jobs:
   run-linters:
     name: Run linters
