@@ -1,6 +1,6 @@
 ---
 name: Python Linting
-on: push
+on: [push, pull_request]
 jobs:
   run-linters:
     name: Run linters
@@ -18,10 +18,14 @@ jobs:
       - name: Install Python dependencies
         run: pip install black flake8
 
-      - name: Run linters
-        uses: samuelmeuli/lint-action@v1
-        with:
-          github_token: ${{ secrets.github_token }}
-          # Enable linters
-          black: true
-          flake8: true
+      - name: Linting
+        uses: ricardochaves/python-lint@v1.1.0
+          with:
+            use-pylint: true
+      # - name: Run linters
+      #   uses: samuelmeuli/lint-action@v1
+      #   with:
+      #     github_token: ${{ secrets.github_token }}
+      #     # Enable linters
+      #     black: true
+      #     flake8: true
