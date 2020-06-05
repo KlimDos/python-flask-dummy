@@ -13,6 +13,14 @@ jobs:
       - name: Get changed files
         id: changed_files
         uses: jitterbit/get-changed-files@v1
+        run: |
+            for changed_file in ${{ steps.files.outputs.all }}; do
+              echo "Do something with this ${changed_file}."
+              if [[ $changed_file =~ ".py" ]]; then
+                  echo "python ${changed_file}"
+              fi
+            done
+
         #with:
           # Format of the steps output context.
           # Can be 'space-delimited', 'csv', or 'json'.
