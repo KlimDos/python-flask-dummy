@@ -1,6 +1,6 @@
 ---
 name: Python Linting
-on: [push, pull_request]
+on: [pull_request]
 jobs:
   run-linters:
     name: Run linters
@@ -10,18 +10,23 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v2
 
+      - name: Get changed files
+        id: changed_files
+        uses: jitterbit/get-changed-files@v1
+
       - name: Set up Python
         uses: actions/setup-python@v1
         with:
           python-version: 3.8
 
       - name: Install Python dependencies
-        run: pip install black flake8
+        run: pip install pylint pylint-fail-under
 
-      - name: Run linters
-        uses: samuelmeuli/lint-action@v1
-        with:
-          github_token: ${{ secrets.github_token }}
-          # Enable linters
-          black: true
-          flake8: true
+      - name: run pylint
+        run: |
+            echo ${{steps.changed_files.outputs.added_modified}}
+            for changed_file in ${{ steps.changed_files.outputs.added_modified }}; do
+              if [[ $changed_file =~ ".py" ]]; then
+                  pylint-fail-under --fail_under 7.0 ${changed_file}
+              fi
+            done
