@@ -46,11 +46,11 @@ jobs:
       # - name: run pylint
       #   run: pylint *.py
 
-      - name: debug
+      - name: run pylint
         run: |
             echo ${{steps.changed_files.outputs.added_modified}}
             for changed_file in ${{ steps.changed_files.outputs.added_modified }}; do
               if [[ $changed_file =~ ".py" ]]; then
-                  pylint ${changed_file}"
+                  pylint ${changed_file}
               fi
             done
