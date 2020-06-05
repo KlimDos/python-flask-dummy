@@ -27,16 +27,6 @@ jobs:
       #   with:
       #     repo-token: ${{ github.token }}
 
-      - name: debug
-        #run: echo ${{steps.changed_files.outputs.added_modified}}
-        run: |
-            for changed_file in ${{ steps.changed_files.outputs.added_modified }}; do
-              echo "Do something with this ${changed_file}."
-              if [[ $changed_file =~ ".py" ]]; then
-                  echo "python ${changed_file}"
-              fi
-            done
-
       - name: Set up Python
         uses: actions/setup-python@v1
         with:
@@ -53,5 +43,14 @@ jobs:
       #     black: true
       #     flake8: true
 
-      - name: run pylint
-        run: pylint *.py
+      # - name: run pylint
+      #   run: pylint *.py
+
+      - name: debug
+        run: |
+            echo ${{steps.changed_files.outputs.added_modified}}
+            for changed_file in ${{ steps.changed_files.outputs.added_modified }}; do
+              if [[ $changed_file =~ ".py" ]]; then
+                  pylint ${changed_file}"
+              fi
+            done
