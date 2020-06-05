@@ -10,6 +10,15 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v2
 
+      - name: Changed Files Exporter
+        id: changed_files
+        uses: futuratrepadeira/changed-files@v3.1.0
+        with:
+          repo-token: ${{ github.token }}
+
+      - name: debug
+        run: echo ${{steps.changed_files.outputs.files_created}}
+
       - name: Set up Python
         uses: actions/setup-python@v1
         with:
