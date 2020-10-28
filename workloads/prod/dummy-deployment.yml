@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dummy-prod
+  namespace: dummy-prod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dummy-prod
+  template:
+    metadata:
+      labels:
+        app: dummy-prod
+        terraform: "false"
+    spec:
+      # volumes:
+      #   - name: log-pvc
+      #     persistentVolumeClaim:
+      #       claimName: data-minio-0
+      containers:
+      - name: dummy
+        image: klimdos/python-flask-dummy
+        env:
+          - name: PORT
+            value: "8080"
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
+        # volumeMounts:
+        # - mountPath: /opt/logs
+        #   name: log-pvc
