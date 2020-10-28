@@ -20,7 +20,7 @@ spec:
       #       claimName: data-minio-0
       containers:
       - name: dummy
-        image: klimdos/python-flask-dummy
+        image: klimdos/python-flask-dummy:2
         env:
           - name: PORT
             value: "8080"
