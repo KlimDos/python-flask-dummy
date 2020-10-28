@@ -6,8 +6,8 @@ metadata:
 spec:
   ports:
     - port: 80
-      name: plaintext
+      protocol: TCP
       targetPort: 8080
   selector:
     app: dummy-dev
-  type: LoadBalancer
+  type: ClusterIP
