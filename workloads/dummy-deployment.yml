@@ -29,7 +29,7 @@ spec:
             memory: "128Mi"
             cpu: "500m"
         ports:
-        - containerPort: 8000
+        - containerPort: 8080
         # volumeMounts:
         # - mountPath: /opt/logs
         #   name: log-pvc
