@@ -11,5 +11,5 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: dummy-dev
+          serviceName: dummy-dev-svc
           servicePort: http
