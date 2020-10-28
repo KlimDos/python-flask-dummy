@@ -14,10 +14,6 @@ spec:
         app: dummy-prod
         terraform: "false"
     spec:
-      # volumes:
-      #   - name: log-pvc
-      #     persistentVolumeClaim:
-      #       claimName: data-minio-0
       containers:
       - name: dummy
         image: klimdos/python-flask-dummy
@@ -30,6 +26,3 @@ spec:
             cpu: "500m"
         ports:
         - containerPort: 8080
-        # volumeMounts:
-        # - mountPath: /opt/logs
-        #   name: log-pvc
