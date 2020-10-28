@@ -12,5 +12,5 @@ spec:
       paths:
       - backend:
           serviceName: dummy-dev-svc
-          servicePort: http
-        path: /
+          servicePort: 80
+        # path: /
