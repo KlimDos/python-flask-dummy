@@ -40,7 +40,7 @@ jobs:
         with:
           push: true
           #tags: klimdos/dummy-flask-app:latest
-          tags: $GITHUB_REPOSITORY:$GITHUB_SHA
+          tags: $GITHUB_REPOSITORY_OWNER/$GITHUB_REPOSITORY_NAME:$GITHUB_SHA_SHORT
           # build-args: |
           #   arg1=value1
           #   arg2=value2
