@@ -19,9 +19,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      -
-        uses: FranzDiebold/github-env-vars-action@v1.2.1
-        name: Print environment variables
+
+      - uses: FranzDiebold/github-env-vars-action@v1.2.1
+      - name: Print environment variables
         run: |
           echo "GITHUB_REPOSITORY_SLUG=$GITHUB_REPOSITORY_SLUG"
           echo "GITHUB_REPOSITORY_OWNER=$GITHUB_REPOSITORY_OWNER"
