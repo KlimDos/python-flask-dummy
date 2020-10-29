@@ -25,7 +25,7 @@ jobs:
         with:
           push: true
           #tags: klimdos/dummy-flask-app:latest
-          tags: ${{ secrets.GITHUB_REPOSITORY }}:${{ secrets.GITHUB_SHA }}
+          tags: $GITHUB_REPOSITORY:$GITHUB_SHA
           # build-args: |
           #   arg1=value1
           #   arg2=value2
