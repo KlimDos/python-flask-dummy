@@ -13,7 +13,7 @@ jobs:
         with:
           images: klimdos/python-flask-dummy # list of Docker images to use as base name for tags
           tag-sha: true # add git short SHA as Docker tag
-          tag-match: *
+          tag-match: (.*)
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
