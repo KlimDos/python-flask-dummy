@@ -13,6 +13,11 @@ if len(sys.argv) > 1:
 else:
     port = "8080"
 
+if len(sys.argv) > 2:
+    build = sys.argv[2]
+else:
+    build = "--"
+
 app = Flask(__name__)
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
