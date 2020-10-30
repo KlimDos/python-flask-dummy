@@ -29,7 +29,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
 
-      # - uses: FranzDiebold/github-env-vars-action@v1.2.1
+      - uses: FranzDiebold/github-env-vars-action@v1.2.1
       # - name: Print environment variables
       #   run: |
       #     echo "GITHUB_REPOSITORY_SLUG=$GITHUB_REPOSITORY_SLUG"
@@ -49,7 +49,7 @@ jobs:
         with:
           push: true
           build-args: |
-            BUILD=${{ steps.docker_meta.outputs.labels.org.opencontainers.image.revision }}
+            BUILD=$GITHUB_SHA_SHORT
           #tags: klimdos/dummy-flask-app:latest
           tags: ${{ steps.docker_meta.outputs.tags }}
           #labels: ${{ steps.docker_meta.outputs.labels }}
