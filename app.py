@@ -19,7 +19,7 @@ app = Flask(__name__)
 def catch_all(path):
     message = {
         "app": "Contenttech application",
-        "version": 0
+        "version": sys.argv[2]
     }
     return (jsonify(message))
 
