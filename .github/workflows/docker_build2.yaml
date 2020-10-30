@@ -1,0 +1,17 @@
+on:
+  push:
+    branches: master
+
+jobs:
+  build-docker:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build image
+      run: |
+        docker build -t klimdos/python-flask-dummy:${GITHUB_SHA} .
+        docker tag klimdos/python-flask-dummy:${GITHUB_SHA} klimdos/python-flask-dummy:latest
+    - name: Push docker image (hash)
+      run: |
+        docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+        docker push klimdos/python-flask-dummy:${GITHUB_SHA}
