@@ -9,7 +9,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: Build image
       run: |
-        docker build --build-arg BUILD=2222 -t klimdos/python-flask-dummy:${GITHUB_SHA} .
+        docker build --build-arg BUILD=${GITHUB_SHA} -t klimdos/python-flask-dummy:${GITHUB_SHA} .
         docker tag klimdos/python-flask-dummy:${GITHUB_SHA} klimdos/python-flask-dummy:latest
     - name: Push docker image (hash)
       run: |
