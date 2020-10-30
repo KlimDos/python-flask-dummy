@@ -30,6 +30,5 @@ jobs:
         docker push klimdos/python-flask-dummy:${GITHUB_SHA}
 
 
-        <job_id>.steps.env
 
 
