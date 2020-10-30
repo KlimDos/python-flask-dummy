@@ -49,7 +49,7 @@ jobs:
         with:
           push: true
           build-args: |
-            BUILD=$GITHUB_SHA_SHORT
+            BUILD=${{ GITHUB_SHA_SHORT }}
           #tags: klimdos/dummy-flask-app:latest
           tags: ${{ steps.docker_meta.outputs.tags }}
           #labels: ${{ steps.docker_meta.outputs.labels }}
