@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 import sys
 import logging
 
+## Uncomment to write logs
 # logging.basicConfig(
 #     filename="/opt/logs/application.log",
 #     level=logging.DEBUG,
