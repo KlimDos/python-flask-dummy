@@ -2,11 +2,11 @@ from flask import Flask, jsonify
 import sys
 import logging
 
-logging.basicConfig(
-    filename="/opt/logs/application.log",
-    level=logging.DEBUG,
-    format='%(asctime)s %(name)s %(levelname)s %(message)s', 
-    )
+# logging.basicConfig(
+#     filename="/opt/logs/application.log",
+#     level=logging.DEBUG,
+#     format='%(asctime)s %(name)s %(levelname)s %(message)s', 
+#     )
 
 if len(sys.argv) > 1:
     port = sys.argv[1]
