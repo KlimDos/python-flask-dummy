@@ -11,9 +11,9 @@ jobs:
         run: |
           echo ${{ github.head_ref }}
 
-          if [[ ${{ github.head_ref }} = K* ]]
+          if [[ ${{ github.head_ref }} = ^[A-Z]* ]]
           then
-            echo "Start with K*"
+            echo "Branch name should start with /"feature/JIRA-000 Imperative ...; hotfix; fix; /""
             exit 1
           else
             echo "No match"
