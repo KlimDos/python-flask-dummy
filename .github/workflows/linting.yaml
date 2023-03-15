@@ -7,6 +7,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check branch name
+        run: |
+          echo ${{ github.ref_name }}
+      
       - name: Check out Git repository
         uses: actions/checkout@v2
 
