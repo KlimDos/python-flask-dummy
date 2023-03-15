@@ -12,7 +12,7 @@ jobs:
         
       - name: Check branch name
         run: |
-          echo ${{ github.base_ref }}
+          echo ${{ github.head_ref }}
 
       - name: Get changed files
         id: changed_files
