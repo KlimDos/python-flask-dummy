@@ -5,14 +5,23 @@ jobs:
   run-linters:
     name: Run linters
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v2
-        
       - name: Check branch name
         run: |
           echo ${{ github.head_ref }}
+
+          if [[ ${{ github.head_ref }} = K* ]]
+          then
+            echo "Start with K*"
+            exit 1
+          else
+            echo "No match"
+            exit 0
+          fi
+    
+      - name: Check out Git repository
+        uses: actions/checkout@v2
 
       - name: Get changed files
         id: changed_files
