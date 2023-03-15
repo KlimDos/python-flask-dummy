@@ -11,13 +11,13 @@ jobs:
         run: |
           echo ${{ github.head_ref }}
 
-          if [[ ${{ github.head_ref }} = ^[A-Z]* ]]
+          if [[ ${{ github.head_ref }} =~ ^[A-Z] ]];
           then
-            echo "Branch name should start with /"feature/JIRA-000 Imperative ...; hotfix; fix; /""
-            exit 1
+              echo -e "Branch name should start with lowercase: \n feature/...\n hotfix/...\n fix/..."
+              exit 1
           else
-            echo "No match"
-            exit 0
+              echo "Branch naming check: passed"
+              exit 0
           fi
     
       - name: Check out Git repository
