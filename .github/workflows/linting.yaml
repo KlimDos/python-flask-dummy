@@ -23,8 +23,8 @@ jobs:
           fi
           
       - name: Step 2
-        if: ${{ failure() && steps.check_branch.exit-status == 1 }}
-        run: echo "Previous step failed with exit code 1"
+        if: ${{ failure() }}
+        run: echo "Pccrevious step failed with exit code 1"
     
       - name: Check out Git repository
         uses: actions/checkout@v2
