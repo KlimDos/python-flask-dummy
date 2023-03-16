@@ -30,12 +30,12 @@ jobs:
           
       - name: Update PR Description
         if: ${{ failure() }}
-        uses: actions/github-script@v3.2.0
+        uses: actions/github-script@v5
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const prNumber = context.payload.pull_request.number
-            await github.issues.createComment({
+            await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: prNumber,
@@ -86,14 +86,14 @@ jobs:
           echo "::set-output name=lint_results::$(cat lint-results.txt)"
 
       - name: Update PR Description
-        uses: actions/github-script@v3.2.0
+        uses: actions/github-script@v5
         # if: always()
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const lintResults = `$(echo "${{ steps.tflint.outputs.lint_results }}")`
             const prNumber = context.payload.pull_request.number   
-            await github.issues.createComment({
+            await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: prNumber,
