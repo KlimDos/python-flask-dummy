@@ -1,5 +1,5 @@
 ---
-name: Python Linting
+name: Naming
 on: [pull_request]
 jobs:
   run-linters:
@@ -36,7 +36,39 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: prNumber,
-              body: newDescription
+              body: `To properly rename a branch in Git and sync changes with GitHub, you can follow these steps:
+
+1. Switch to the branch that you want to rename:
+
+```git checkout <old-branch-name>```
+
+2. Rename the branch using the -m option:
+
+```git branch -m <new-branch-name>```
+
+This will rename the local branch to the new name.
+
+3. Push the new branch to GitHub using the --force option:
+
+```git push --force origin <new-branch-name>```
+
+This will update the remote branch on GitHub with the new name.
+
+4. Delete the old branch on GitHub:
+
+```git push origin --delete <old-branch-name>```
+
+* This will delete the old branch from GitHub.
+
+5. (Optional) If you have local branches that track the old remote branch, update them to track the new remote branch:
+
+```git branch --set-upstream-to=origin/<new-branch-name> <new-branch-name>```
+* This will update the local branch to track the new remote branch.
+
+After these steps, the branch will be renamed both locally and on GitHub, and any local branches that track the old remote branch will be updated to track the new remote branch.
+
+Note that renaming a branch can cause problems for anyone else who has cloned the repository and has a local copy of the old branch. If this is the case, you should communicate with them to let them know about the branch rename and to make sure they update their local copy of the branch.
+ ✨`
             })
     
       - name: Check out Git repository
