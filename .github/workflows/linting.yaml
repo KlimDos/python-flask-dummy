@@ -82,6 +82,7 @@ jobs:
       - name: Lint Terraform Code
         id: tflint
         run: |
+          pwd
           tflint | tee lint-results.txt
           echo "::set-output name=lint_results::$(base64 -w 0 lint-results.txt)"
           
@@ -105,7 +106,7 @@ jobs:
               body: lintResults
             })
             
-            
+      
 # ###
 
 # Lint Pyton Code
