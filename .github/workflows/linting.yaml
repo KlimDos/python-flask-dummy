@@ -11,24 +11,16 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Add Review Comment
-        uses: actions/github-script@v3
+        uses: actions/github-script@v5
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const { owner, repo } = context.repo;
-            const prNumber = context.payload.pull_request.number;
-            const body = "This is a review comment from a GitHub Action!";
-            const event = "COMMENT";
-            const review_id = null;
-            const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-            await octokit.pulls.createReview({
-              owner,
-              repo,
-              pull_number: prNumber,
-              body,
-              event,
-              review_id,
-            });
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 Thanks for reporting!'
+            })
 
 
 
