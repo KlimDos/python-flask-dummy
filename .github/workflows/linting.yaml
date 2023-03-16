@@ -90,11 +90,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            # const lintResults = `$(echo "${{ steps.tflint.outputs.lint_results }}" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')`
             const lintResults = `$(echo "${{ steps.tflint.outputs.lint_results }}" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')`
-            const prNumber = context.payload.pull_request.number
-            # const currentDescription = context.payload.pull_request.body
-            # const newDescription = currentDescription + "\n\nTerraform Linting Results:\n\n" + lintResults     
+            const prNumber = context.payload.pull_request.number   
             await github.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
