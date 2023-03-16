@@ -67,45 +67,48 @@ jobs:
                     "After these steps, the branch will be renamed both locally and on GitHub, and any local branches that track the old remote branch will be updated to track the new remote branch.\n\n"+
                     "Note that renaming a branch can cause problems for anyone else who has cloned the repository and has a local copy of the old branch. If this is the case, you should communicate with them to let them know about the branch rename and to make sure they update their local copy of the branch. ✨"
            
-            });
+            })
           
           
 
+# Lint Terraform Code
+      - name: Install tflint
+        run: |
+          wget https://github.com/terraform-linters/tflint/releases/latest/download/tflint_linux_amd64.zip
+          unzip tflint_linux_amd64.zip
+          sudo mv tflint /usr/local/bin/
+
+      - name: Lint Terraform Code
+        run: |
+          tflint | tee lint-results.txt
+          echo "::set-output name=lint_results::$(cat lint-results.txt)"
+
+      - name: Update PR Description
+        uses: actions/github-script@v3.2.0
+        # if: always()
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            # const lintResults = `$(echo "${{ steps.tflint.outputs.lint_results }}" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')`
+            const lintResults = `$(echo "${{ steps.tflint.outputs.lint_results }}" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')`
+            const prNumber = context.payload.pull_request.number
+            const currentDescription = context.payload.pull_request.body
+            const newDescription = currentDescription + "\n\nTerraform Linting Results:\n\n" + lintResults
+            await github.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: lintResults
+            })
+            
+            
+# ###
+
+# Lint Pyton Code
 #       - name: Get changed iles
 #         id: changed_files
 #         uses: jitterbit/get-changed-files@v1
 
-# # Lint Terraform Code
-#       - name: Install tflint
-#         run: |
-#           wget https://github.com/terraform-linters/tflint/releases/latest/download/tflint_linux_amd64.zip
-#           unzip tflint_linux_amd64.zip
-#           sudo mv tflint /usr/local/bin/
-          
-          
-#       - name: Lint Terraform Code
-#         run: |
-#           tflint | tee lint-results.txt
-#           echo "::set-output name=lint_results::$(cat lint-results.txt)"
-
-#       - name: Update PR Description
-#         uses: actions/github-script@v3.2.0
-#         # if: always()
-#         with:
-#           github-token: ${{ secrets.GITHUB_TOKEN }}
-#           script: |
-#             const lintResults = `$(echo "${{ steps.tflint.outputs.lint_results }}" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')`
-#             const prNumber = context.payload.pull_request.number
-#             const currentDescription = context.payload.pull_request.body
-#             const newDescription = currentDescription + "\n\nTerraform Linting Results:\n\n" + lintResults
-#             await github.pulls.update({
-#               owner: context.repo.owner,
-#               repo: context.repo.repo,
-#               pull_number: prNumber,
-#               body: newDescription
-#             })
-
-# Lint Pyton Code
 #       - name: Set up Python
 #         uses: actions/setup-python@v1
 #         with:
