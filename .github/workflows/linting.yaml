@@ -7,6 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
       - name: Check Branch Name
         id: check_branch
         run: |
@@ -73,8 +76,6 @@ jobs:
             });
 
     
-      - name: Check out Git repository
-        uses: actions/checkout@v2
 
       - name: Get changed files
         id: changed_files
