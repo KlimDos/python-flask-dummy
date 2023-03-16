@@ -96,7 +96,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: prNumber,
-              body: "# Branch name does not start with a lowercase letter.:\n\n"
+              body: lintResults
             })
             
             
