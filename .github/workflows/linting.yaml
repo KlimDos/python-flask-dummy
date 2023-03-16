@@ -83,12 +83,12 @@ jobs:
         id: tflint
         run: |
           tflint | tee lint-results.txt
-          echo "::set-output name=lint_results::$(cat lint-results.txt)"
+          echo "::set-output name=lint_results::$(base64 -w 0 lint-results.txt)"
           
       - name: Lint Terraform Code2
         id: tflint2
         run: |
-          echo "${{ steps.tflint.outputs.lint_results }}"
+          echo "${{ steps.tflint.outputs.lint_results }}" | base64 --decode
 
       - name: Update PR Description
         uses: actions/github-script@v5
