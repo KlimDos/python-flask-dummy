@@ -10,18 +10,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Add Review Comment
-        uses: actions/github-script@v5
+      - name: Request Changes
+        uses: peter-evans/request-changes@v1
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '👋 Thanks for reporting!'
-            })
-
+          token: ${{ secrets.GITHUB_TOKEN }}
+          message: "Please make changes to this pull request."
 
 
 # ---
