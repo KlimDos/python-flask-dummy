@@ -30,10 +30,14 @@ jobs:
           script: |
             const prNumber = context.payload.pull_request.number
             const currentDescription = context.payload.pull_request.body
-            await github.issues.createComment({
+            const event = "COMMENT";
+            const review_id = null;
+            await octokit.pulls.createReview({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: prNumber,
+              pull_number: prNumber,
+              event,
+              review_id,
               body: "# Branch name does not start with a lowercase letter.:\n\n"+
                     "To properly rename a branch in Git and sync changes with GitHub, you can follow these steps:\n\n"+
                     "1. Switch to the branch that you want to rename:\n"+
