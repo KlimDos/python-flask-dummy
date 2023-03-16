@@ -88,7 +88,10 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: Run TFLint
-        run: tflint
+        run: |
+          tflint | tee lint-results.txt
+          # base64 is used to save md formatting style 
+          echo "::set-output name=lint_results::$(base64 -w 0 lint-results.txt)"
 ###
 
 
