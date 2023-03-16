@@ -28,15 +28,14 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const lintResults = "To properly rename a branch in Git and sync changes with GitHub, you can follow these steps:"
             const prNumber = context.payload.pull_request.number
             const currentDescription = context.payload.pull_request.body
-            const newDescription = currentDescription + "\n\nTerraform Linting Results:\n\n" + lintResults
             await github.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: prNumber,
-              body: "To properly rename a branch in Git and sync changes with GitHub, you can follow these steps:\n\n"+
+              body: "# Branch name does not start with a lowercase letter.:\n\n"+
+                    "To properly rename a branch in Git and sync changes with GitHub, you can follow these steps:\n\n"+
                     "1. Switch to the branch that you want to rename:\n"+
                     "```\n"+
                     "git checkout <old-branch-name>\n"+
