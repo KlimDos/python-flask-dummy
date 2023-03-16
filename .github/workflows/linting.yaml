@@ -24,7 +24,7 @@ jobs:
           
       - name: Update PR Description
         if: ${{ failure() }}
-        uses: actions/github-script@v3.2.0
+        uses: actions/github-script@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
