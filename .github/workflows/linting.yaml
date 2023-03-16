@@ -72,11 +72,14 @@ jobs:
             })
 # End Lint Branch Name ###
 
-###
-      - uses: terraform-linters/setup-tflint@v3
-        name: Setup TFLint
+# Lint Terraform Code
+
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v3
         with:
           tflint_version: v0.44.1
+
+      # TODO Add additional plugins https://github.com/terraform-linters/tflint-ruleset-aws
 
       - name: Show version
         run: tflint --version
@@ -92,29 +95,6 @@ jobs:
           tflint | tee lint-results.txt
           # base64 is used to save md formatting style 
           echo "::set-output name=lint_results::$(base64 -w 0 lint-results.txt)"
-###
-
-
-
-# Lint Terraform Code
-      # - name: Install tflint
-      #   run: |
-      #     wget https://github.com/terraform-linters/tflint/releases/latest/download/tflint_linux_amd64.zip
-      #     unzip tflint_linux_amd64.zip
-      #     sudo mv tflint /usr/local/bin/
-
-      - name: Lint Terraform Code
-        id: tflint
-        run: |
-
-          tflint | tee lint-results.txt
-          # base64 is used to save md formatting style 
-          echo "::set-output name=lint_results::$(base64 -w 0 lint-results.txt)"
-          
-      # - name: Debug
-      #   id: tflint2
-      #   run: |
-      #     echo "${{ steps.tflint.outputs.lint_results }}" | base64 --decode
 
       - name: Update PR Description
         uses: actions/github-script@v6
