@@ -33,6 +33,7 @@ jobs:
             const body = "This is a review comment from a GitHub Action!";
             const event = "COMMENT";
             const review_id = null;
+            const { Octokit } = require("@octokit/rest");
             const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
             await octokit.pulls.createReview({
               owner,
