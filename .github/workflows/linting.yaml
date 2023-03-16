@@ -77,44 +77,4 @@ jobs:
 #                   pylint-fail-under --fail_under 7.0 ${changed_file}
 #               fi
 #             done
-            
-            
----
-name: Terraform Linting
-on:
-  pull_request:
-    types: [opened, reopened, synchronize]
-jobs:
-  tflint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
 
-      - name: Install tflint
-        run: |
-          wget https://github.com/terraform-linters/tflint/releases/latest/download/tflint_linux_amd64.zip
-          unzip tflint_linux_amd64.zip
-          sudo mv tflint /usr/local/bin/
-      
-      - name: Lint Terraform Code
-        run: |
-          tflint | tee lint-results.txt
-          echo "::set-output name=lint_results::$(cat lint-results.txt)"
-
-      - name: Update PR Description
-        uses: actions/github-script@v3.2.0
-        if: always()
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const lintResults = `$(echo "${{ steps.tflint.outputs.lint_results }}" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')`
-            const prNumber = context.payload.pull_request.number
-            const currentDescription = context.payload.pull_request.body
-            const newDescription = currentDescription + "\n\nTerraform Linting Results:\n\n" + lintResults
-            await github.pulls.update({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: prNumber,
-              body: newDescription
-            })
