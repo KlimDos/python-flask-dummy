@@ -7,13 +7,14 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Check branch name
+      - name: Check Branch Name
         run: |
           echo ${{ github.head_ref }}
 
           if [[ ${{ github.head_ref }} =~ ^[A-Z] ]];
           then
-              echo -e "Branch name should start with lowercase: \n feature/...\n hotfix/...\n fix/..."
+              # echo -e "Branch name should start with lowercase: \n feature/...\n hotfix/...\n fix/..."
+              echo -e "Branch name does not start with a lowercase letter."
               exit 1
           else
               echo "Branch naming check: passed"
@@ -27,19 +28,93 @@ jobs:
         id: changed_files
         uses: jitterbit/get-changed-files@v1
 
-      - name: Set up Python
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.8
-
-      - name: Install Python dependencies
-        run: pip install pylint pylint-fail-under
-
-      - name: run pylint
+# Lint Terraform Code
+      - name: Install tflint
         run: |
-            echo ${{steps.changed_files.outputs.added_modified}}
-            for changed_file in ${{ steps.changed_files.outputs.added_modified }}; do
-              if [[ $changed_file =~ ".py" ]]; then
-                  pylint-fail-under --fail_under 7.0 ${changed_file}
-              fi
-            done
+          wget https://github.com/terraform-linters/tflint/releases/latest/download/tflint_linux_amd64.zip
+          unzip tflint_linux_amd64.zip
+          sudo mv tflint /usr/local/bin/
+          
+          
+      - name: Lint Terraform Code
+        run: |
+          tflint | tee lint-results.txt
+          echo "::set-output name=lint_results::$(cat lint-results.txt)"
+
+      - name: Update PR Description
+        uses: actions/github-script@v3.2.0
+        if: always()
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const lintResults = `$(echo "${{ steps.tflint.outputs.lint_results }}" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')`
+            const prNumber = context.payload.pull_request.number
+            const currentDescription = context.payload.pull_request.body
+            const newDescription = currentDescription + "\n\nTerraform Linting Results:\n\n" + lintResults
+            await github.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+              body: newDescription
+            })
+
+# Lint Pyton Code
+#       - name: Set up Python
+#         uses: actions/setup-python@v1
+#         with:
+#           python-version: 3.8
+
+#       - name: Install Python dependencies
+#         run: pip install pylint pylint-fail-under
+        
+        
+
+#       - name: run pylint
+#         run: |
+#             echo ${{steps.changed_files.outputs.added_modified}}
+#             for changed_file in ${{ steps.changed_files.outputs.added_modified }}; do
+#               if [[ $changed_file =~ ".py" ]]; then
+#                   pylint-fail-under --fail_under 7.0 ${changed_file}
+#               fi
+#             done
+            
+            
+---
+name: Terraform Linting
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+jobs:
+  tflint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Install tflint
+        run: |
+          wget https://github.com/terraform-linters/tflint/releases/latest/download/tflint_linux_amd64.zip
+          unzip tflint_linux_amd64.zip
+          sudo mv tflint /usr/local/bin/
+      
+      - name: Lint Terraform Code
+        run: |
+          tflint | tee lint-results.txt
+          echo "::set-output name=lint_results::$(cat lint-results.txt)"
+
+      - name: Update PR Description
+        uses: actions/github-script@v3.2.0
+        if: always()
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const lintResults = `$(echo "${{ steps.tflint.outputs.lint_results }}" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')`
+            const prNumber = context.payload.pull_request.number
+            const currentDescription = context.payload.pull_request.body
+            const newDescription = currentDescription + "\n\nTerraform Linting Results:\n\n" + lintResults
+            await github.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+              body: newDescription
+            })
