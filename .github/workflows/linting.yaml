@@ -20,7 +20,7 @@ jobs:
 
           if [[ ${{ github.head_ref }} =~ ^[A-Z] ]];
           then
-              # TODO instead of lowercase check we could check for naming convention pattern
+              # TODO instead of lowercase think if we could check for naming convention pattern
               # echo -e "Branch name should start with lowercase: \n feature/...\n hotfix/...\n fix/..."
 
               echo -e "Branch name does not start with a lowercase letter."
