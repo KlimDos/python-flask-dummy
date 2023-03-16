@@ -48,7 +48,7 @@ jobs:
 
       - name: Update PR Description
         uses: actions/github-script@v3.2.0
-        if: always()
+        # if: always()
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
