@@ -80,6 +80,7 @@ jobs:
           sudo mv tflint /usr/local/bin/
 
       - name: Lint Terraform Code
+        id: tflint
         run: |
           tflint | tee lint-results.txt
           echo "::set-output name=lint_results::$(cat lint-results.txt)"
@@ -90,7 +91,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const lintResults = `$(echo "${{ steps.tflint.outputs.lint_results }}" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')`
+            const lintResults = `$(echo "${{ steps.tflint.outputs.lint_results }}")`
             const prNumber = context.payload.pull_request.number   
             await github.issues.createComment({
               owner: context.repo.owner,
