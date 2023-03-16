@@ -28,14 +28,15 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const prNumber = context.payload.pull_request.number
-            const currentDescription = context.payload.pull_request.body
+            const { owner, repo } = context.repo;
+            const prNumber = context.payload.pull_request.number;
+            const body = "This is a review comment from a GitHub Action!";
             const event = "COMMENT";
             const review_id = null;
             const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
             await octokit.pulls.createReview({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+              owner,
+              repo,
               pull_number: prNumber,
               event,
               review_id,
@@ -67,7 +68,9 @@ jobs:
                     "* This will update the local branch to track the new remote branch.\n\n"+
                     "After these steps, the branch will be renamed both locally and on GitHub, and any local branches that track the old remote branch will be updated to track the new remote branch.\n\n"+
                     "Note that renaming a branch can cause problems for anyone else who has cloned the repository and has a local copy of the old branch. If this is the case, you should communicate with them to let them know about the branch rename and to make sure they update their local copy of the branch. ✨"
-            })
+           
+            });
+
     
       - name: Check out Git repository
         uses: actions/checkout@v2
