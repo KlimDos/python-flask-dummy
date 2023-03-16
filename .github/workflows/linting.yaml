@@ -8,6 +8,7 @@ jobs:
     
     steps:
       - name: Check Branch Name
+        id: check_branch
         run: |
           echo ${{ github.head_ref }}
 
@@ -20,6 +21,10 @@ jobs:
               echo "Branch naming check: passed"
               exit 0
           fi
+          
+      - name: Step 2
+        if: ${{ failure() && steps.step1.exit-status == 1 }}
+        run: echo "Previous step failed with exit code 1"
     
       - name: Check out Git repository
         uses: actions/checkout@v2
