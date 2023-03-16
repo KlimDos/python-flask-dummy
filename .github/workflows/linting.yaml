@@ -83,7 +83,6 @@ jobs:
         id: tflint
         run: |
           tflint | tee lint-results.txt
-          tr '\n' ',' < lint-results.txt > lint-results.tmp && mv lint-results.tmp lint-results.txt
           echo "::set-output name=lint_results::$(cat lint-results.txt)"
           
       - name: Lint Terraform Code2
