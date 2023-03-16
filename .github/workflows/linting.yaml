@@ -1,102 +1,77 @@
-name: Add Review Comment
+---
+name: PR pre-checks
 on:
   pull_request:
     types: [opened, reopened]
-
 jobs:
-  add_comment:
+  run-linters:
+    name: Run linters
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Checkout code
+      - name: Check out Git repository
         uses: actions/checkout@v2
 
-      - name: Request Changes
-        uses: peter-evans/request-changes@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          message: "Please make changes to this pull request."
+      - name: Check Branch Name
+        id: check_branch
+        run: |
+          echo ${{ github.head_ref }}
 
-
-# ---
-# name: Naming
-# on: [pull_request]
-# jobs:
-#   run-linters:
-#     name: Run linters
-#     runs-on: ubuntu-latest
-    
-#     steps:
-#       - name: Check out Git repository
-#         uses: actions/checkout@v2
-
-#       - name: Check Branch Name
-#         id: check_branch
-#         run: |
-#           echo ${{ github.head_ref }}
-
-#           if [[ ${{ github.head_ref }} =~ ^[A-Z] ]];
-#           then
-#               # echo -e "Branch name should start with lowercase: \n feature/...\n hotfix/...\n fix/..."
-#               echo -e "Branch name does not start with a lowercase letter."
-#               exit 1
-#           else
-#               echo "Branch naming check: passed"
-#               exit 0
-#           fi
+          if [[ ${{ github.head_ref }} =~ ^[A-Z] ]];
+          then
+              # echo -e "Branch name should start with lowercase: \n feature/...\n hotfix/...\n fix/..."
+              echo -e "Branch name does not start with a lowercase letter."
+              exit 1
+          else
+              echo "Branch naming check: passed"
+              exit 0
+          fi
           
-#       - name: Update PR Description
-#         if: ${{ failure() }}
-#         uses: actions/github-script@v4
-#         with:
-#           github-token: ${{ secrets.GITHUB_TOKEN }}
-#           script: |
-#             const { owner, repo } = context.repo;
-#             const prNumber = context.payload.pull_request.number;
-#             const body = "This is a review comment from a GitHub Action!";
-#             const event = "COMMENT";
-#             const review_id = null;
-#             const { Octokit } = require("@octokit/rest");
-#             const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-#             await octokit.pulls.createReview({
-#               owner,
-#               repo,
-#               pull_number: prNumber,
-#               event,
-#               review_id,
-#               body: "# Branch name does not start with a lowercase letter.:\n\n"+
-#                     "To properly rename a branch in Git and sync changes with GitHub, you can follow these steps:\n\n"+
-#                     "1. Switch to the branch that you want to rename:\n"+
-#                     "```\n"+
-#                     "git checkout <old-branch-name>\n"+
-#                     "```\n\n"+
-#                     "2. Rename the branch using the -m option:\n"+
-#                     "```\n"+
-#                     "git branch -m <new-branch-name>\n"+
-#                     "```\n\n"+
-#                     "This will rename the local branch to the new name.\n\n"+
-#                     "3. Push the new branch to GitHub using the --force option:\n"+
-#                     "```\n"+
-#                     "git push --force origin <new-branch-name>\n"+
-#                     "```\n\n"+
-#                     "This will update the remote branch on GitHub with the new name.\n\n"+
-#                     "4. Delete the old branch on GitHub:\n"+
-#                     "```\n"+
-#                     "git push origin --delete <old-branch-name>\n"+
-#                     "```\n\n"+
-#                     "* This will delete the old branch from GitHub.\n\n"+
-#                     "5. (Optional) If you have local branches that track the old remote branch, update them to track the new remote branch:\n"+
-#                     "```\n"+
-#                     "git branch --set-upstream-to=origin/<new-branch-name> <new-branch-name>\n"+
-#                     "```\n\n"+
-#                     "* This will update the local branch to track the new remote branch.\n\n"+
-#                     "After these steps, the branch will be renamed both locally and on GitHub, and any local branches that track the old remote branch will be updated to track the new remote branch.\n\n"+
-#                     "Note that renaming a branch can cause problems for anyone else who has cloned the repository and has a local copy of the old branch. If this is the case, you should communicate with them to let them know about the branch rename and to make sure they update their local copy of the branch. ✨"
+      - name: Update PR Description
+        if: ${{ failure() }}
+        uses: actions/github-script@v3.2.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = context.payload.pull_request.number
+            await github.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: "# Branch name does not start with a lowercase letter.:\n\n"+
+                    "To properly rename a branch in Git and sync changes with GitHub, you can follow these steps:\n\n"+
+                    "1. Switch to the branch that you want to rename:\n"+
+                    "```\n"+
+                    "git checkout <old-branch-name>\n"+
+                    "```\n\n"+
+                    "2. Rename the branch using the -m option:\n"+
+                    "```\n"+
+                    "git branch -m <new-branch-name>\n"+
+                    "```\n\n"+
+                    "This will rename the local branch to the new name.\n\n"+
+                    "3. Push the new branch to GitHub using the --force option:\n"+
+                    "```\n"+
+                    "git push --force origin <new-branch-name>\n"+
+                    "```\n\n"+
+                    "This will update the remote branch on GitHub with the new name.\n\n"+
+                    "4. Delete the old branch on GitHub:\n"+
+                    "```\n"+
+                    "git push origin --delete <old-branch-name>\n"+
+                    "```\n\n"+
+                    "* This will delete the old branch from GitHub.\n\n"+
+                    "5. (Optional) If you have local branches that track the old remote branch, update them to track the new remote branch:\n"+
+                    "```\n"+
+                    "git branch --set-upstream-to=origin/<new-branch-name> <new-branch-name>\n"+
+                    "```\n\n"+
+                    "* This will update the local branch to track the new remote branch.\n\n"+
+                    "After these steps, the branch will be renamed both locally and on GitHub, and any local branches that track the old remote branch will be updated to track the new remote branch.\n\n"+
+                    "Note that renaming a branch can cause problems for anyone else who has cloned the repository and has a local copy of the old branch. If this is the case, you should communicate with them to let them know about the branch rename and to make sure they update their local copy of the branch. ✨"
            
-#             });
+            });
+          
+          
 
-    
-
-#       - name: Get changed files
+#       - name: Get changed iles
 #         id: changed_files
 #         uses: jitterbit/get-changed-files@v1
 
