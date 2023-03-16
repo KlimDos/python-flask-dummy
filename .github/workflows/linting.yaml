@@ -32,10 +32,10 @@ jobs:
             const prNumber = context.payload.pull_request.number
             const currentDescription = context.payload.pull_request.body
             const newDescription = currentDescription + "\n\nTerraform Linting Results:\n\n" + lintResults
-            await github.pulls.update({
+            await github.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: prNumber,
+              issue_number: prNumber,
               body: "To properly rename a branch in Git and sync changes with GitHub, you can follow these steps:\n\n"+
                     "1. Switch to the branch that you want to rename:\n"+
                     "```\n"+
